@@ -96,7 +96,7 @@ public class UserRepositoryTest extends MyDummyEntity {
     }
 
     @Test
-    public void findByid_test() {
+    public void findById_test() {
         // given 1 - DB에 영속화
         User user = newUser("ssar");
         User userPS = userRepository.save(user);

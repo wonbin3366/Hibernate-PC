@@ -18,7 +18,7 @@ public class BoardRepository {
     }
 
     public List<Board> findAll() {
-        return em.createQuery("select b from board b", Board.class).getResultList();
+        return em.createQuery("select b from Board b", Board.class).getResultList();
     }
 
     // 업데이트는 영속화된거를 집어넣어야함?
