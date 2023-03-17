@@ -100,17 +100,19 @@ public class BoardRepositoryTest extends MyDummyEntity {
         // given 1 - DB에 영속화
         User user = newUser("ssar");
         User userPS = userRepository.save(user);
+        Board board = newBoard("제목1", userPS);
+        Board boardPS = boardRepository.save(board);
 
         // given 2 - request 데이터
         int id = 1;
-        User findUserPS = userRepository.findById(id);
+        Board findBoardPS = boardRepository.findById(id);
 
         // when
-        userRepository.delete(findUserPS);
+        boardRepository.delete(findBoardPS);
 
         // then
-        User deleteUserPS = userRepository.findById(1);
-        Assertions.assertThat(deleteUserPS).isNull();
+        Board deleteBoardPS = boardRepository.findById(1);
+        Assertions.assertThat(deleteBoardPS).isNull();
 
     }
 
