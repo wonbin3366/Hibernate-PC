@@ -60,17 +60,20 @@ public class BoardRepositoryTest extends MyDummyEntity {
         // given 1 - DB에 영속화
         User user = newUser("ssar");
         User userPS = userRepository.save(user);
+        Board board = newBoard("제목1", userPS);
+        Board boardPS = boardRepository.save(board);
 
         // given 2 - request 데이터
-        String password = "5678";
-        String email = "ssar@gmail.com";
+        String title = "제목12";
+        String content = "내용12";
 
         // when
-        userPS.update(password, email);
-        User updateUserPS = userRepository.save(userPS);
+        boardPS.update(title, content);
+        em.flush(); // 트랜잭션 종료시 자동 발동됨
 
         // then
-        Assertions.assertThat(updateUserPS.getPassword()).isEqualTo("5678");
+        Board findBoardPS = boardRepository.findById(1);
+        Assertions.assertThat(findBoardPS.getContent()).isEqualTo("내용12");
     }
 
     @Test

@@ -46,6 +46,11 @@ public class Board {
         this.createdAt = createdAt;
     }
 
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return "Board [id=" + id + ", user=" + user + ", title=" + title + ", content=" + content + ", createdAt="
