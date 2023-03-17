@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.ForeignKey;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,4 +36,20 @@ public class Board {
 
     @CreationTimestamp
     private Timestamp createdAt;
+
+    @Builder
+    public Board(Integer id, User user, String title, String content, Timestamp createdAt) {
+        this.id = id;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Board [id=" + id + ", user=" + user + ", title=" + title + ", content=" + content + ", createdAt="
+                + createdAt + "]";
+    }
+
 }

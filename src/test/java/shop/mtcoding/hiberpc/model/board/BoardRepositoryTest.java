@@ -1,4 +1,4 @@
-package shop.mtcoding.hiberpc.model.user;
+package shop.mtcoding.hiberpc.model.board;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,13 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import shop.mtcoding.hiberpc.config.dummy.MyDummyEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Import(UserRepository.class)
+import shop.mtcoding.hiberpc.config.dummy.MyDummyEntity;
+import shop.mtcoding.hiberpc.model.user.User;
+import shop.mtcoding.hiberpc.model.user.UserRepository;
+
+@Import({ BoardRepository.class, UserRepository.class })
 @DataJpaTest
-public class UserRepositoryTest extends MyDummyEntity {
+public class BoardRepositoryTest extends MyDummyEntity {
 
     @Autowired // 테스트는 무조건 autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -27,16 +34,25 @@ public class UserRepositoryTest extends MyDummyEntity {
     @BeforeEach
     public void setUp() {
         em.createNativeQuery("ALTER TABLE user_tb ALTER COLUMN id RESTART WITH 1").executeUpdate();
+        em.createNativeQuery("ALTER TABLE board_tb ALTER COLUMN id RESTART WITH 1").executeUpdate();
     }
 
     @Test
     public void save_test() {
         // given
         User user = newUser("ssar");
-        // when
         User userPS = userRepository.save(user);
+
+        // given 2
+        Board board = newBoard("제목1", userPS);
+
+        // when
+        Board boardPS = boardRepository.save(board);
+        System.out.println("테스트 : " + boardPS);
+
         // then
-        Assertions.assertThat(userPS.getId()).isEqualTo(1);
+        Assertions.assertThat(boardPS.getId()).isEqualTo(1);
+        Assertions.assertThat(boardPS.getUser().getId()).isEqualTo(1);
     }
 
     @Test
