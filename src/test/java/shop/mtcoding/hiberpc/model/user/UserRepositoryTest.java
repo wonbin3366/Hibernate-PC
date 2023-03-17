@@ -1,8 +1,12 @@
 package shop.mtcoding.hiberpc.model.user;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,6 +23,11 @@ public class UserRepositoryTest extends MyDummyEntity {
 
     @Autowired
     private EntityManager em;
+
+    @BeforeEach
+    public void setUp() {
+        em.createNativeQuery("ALTER TABLE user_tb ALTER COLUMN id RESTART WITH 1").executeUpdate();
+    }
 
     @Test
     public void save_test() {
@@ -85,4 +94,39 @@ public class UserRepositoryTest extends MyDummyEntity {
         Assertions.assertThat(deleteUserPS).isNull();
 
     }
+
+    @Test
+    public void findByid_test() {
+        // given 1 - DB에 영속화
+        User user = newUser("ssar");
+        User userPS = userRepository.save(user);
+
+        // given 2
+        int id = 1;
+
+        // when
+        userPS = userRepository.findById(id);
+
+        // then
+        Assertions.assertThat(userPS.getUsername()).isEqualTo("ssar");
+
+    }
+
+    @Test
+    public void findAll_test() {
+        // given
+        List<User> userList = Arrays.asList(newUser("ssar"), newUser("cos"));
+        userList.stream().forEach((user) -> {
+            userRepository.save(user);
+        });
+
+        // when
+        List<User> userListPS = userRepository.findAll();
+        System.out.println("테스트 :" + userListPS);
+
+        // then
+        Assertions.assertThat(userListPS.size()).isEqualTo(2);
+
+    }
+
 }
