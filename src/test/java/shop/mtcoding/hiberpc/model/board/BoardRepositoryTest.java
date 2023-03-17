@@ -104,6 +104,7 @@ public class BoardRepositoryTest extends MyDummyEntity {
         Board boardPS = boardRepository.save(board);
 
         // given 2 - request 데이터
+        // em.clear(); 쓸일없음
         int id = 1;
         Board findBoardPS = boardRepository.findById(id);
 
@@ -121,15 +122,18 @@ public class BoardRepositoryTest extends MyDummyEntity {
         // given 1 - DB에 영속화
         User user = newUser("ssar");
         User userPS = userRepository.save(user);
+        Board board = newBoard("제목1", userPS);
+        boardRepository.save(board);
 
         // given 2
         int id = 1;
 
         // when
-        userPS = userRepository.findById(id);
+        Board findBoardPS = boardRepository.findById(id);
 
         // then
-        Assertions.assertThat(userPS.getUsername()).isEqualTo("ssar");
+        Assertions.assertThat(findBoardPS.getUser().getUsername()).isEqualTo("ssar");
+        Assertions.assertThat(findBoardPS.getTitle()).isEqualTo("제목1");
 
     }
 
